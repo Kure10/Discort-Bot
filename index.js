@@ -21,7 +21,8 @@ client.on('messageCreate', async message => {
     }
 
     // Ignor bot Messages
-    if (message.author.bot) return;
+    if (message.author.bot)
+        return;
 
     if (!text.includes("START: After") && !text.includes("QUIT: After")) return;
 
