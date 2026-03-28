@@ -2,17 +2,23 @@
 const express = require("express");
 const app = express();
 
+// 🌐 Fake web server for Render (IMPORTANT)
+app.get("/", (req, res) => {
+    res.send("Bot is running");
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Web server running on port ${PORT}`);
+});
+
+// 🤖 Discord bot setup
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.MessageContent
     ]
-});
-
-
-app.get("/", (req, res) => {
-    res.send("Bot is running");
 });
 
 const sessions = {};
@@ -23,6 +29,9 @@ client.once("ready", () => {
 
 client.on('messageCreate', async message => {
 
+    // ❗ VERY IMPORTANT: ignore bots FIRST
+    if (message.author.bot) return;
+
     const text = message.content;
 
     // command
@@ -30,10 +39,6 @@ client.on('messageCreate', async message => {
         await handleStatusCommand(message);
         return;
     }
-
-    // Ignor bot Messages
-    if (message.author.bot)
-        return;
 
     if (!text.includes("START: After") && !text.includes("QUIT: After")) return;
 
@@ -58,11 +63,13 @@ client.on('messageCreate', async message => {
     }
 });
 
+// 🔍 Extract username
 function extractUser(text) {
     const match = text.match(/👤\s*([^@|]+)/);
     return match ? match[1].trim() : "unknown";
 }
 
+// 📊 Status command
 async function handleStatusCommand(message) {
 
     let allMessages = [];
@@ -121,4 +128,5 @@ async function handleStatusCommand(message) {
     await message.reply(reply);
 }
 
+// 🔐 Login (make sure env variable exists in Render)
 client.login(process.env.DISCORD_TOKEN);
