@@ -10,6 +10,10 @@ const client = new Client({
 
 const sessions = {};
 
+client.once("ready", () => {
+    console.log("RENDER BOT READY");
+});
+
 client.on('messageCreate', async message => {
 
     const text = message.content;
