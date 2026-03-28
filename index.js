@@ -29,17 +29,15 @@ client.once("ready", () => {
 
 client.on('messageCreate', async message => {
 
-    // ❗ VERY IMPORTANT: ignore bots FIRST
-    if (message.author.bot) return;
-
     const text = message.content;
 
-    // command
+    // command (from ANYONE)
     if (text === "UnityTracker: Status") {
         await handleStatusCommand(message);
         return;
     }
 
+    // process START / QUIT from ANY source (bots, users, webhooks)
     if (!text.includes("START: After") && !text.includes("QUIT: After")) return;
 
     if (text.includes("START: After")) {
