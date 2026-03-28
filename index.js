@@ -1,4 +1,6 @@
 ﻿const { Client, GatewayIntentBits } = require('discord.js');
+const express = require("express");
+const app = express();
 
 const client = new Client({
     intents: [
@@ -6,6 +8,11 @@ const client = new Client({
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.MessageContent
     ]
+});
+
+
+app.get("/", (req, res) => {
+    res.send("Bot is running");
 });
 
 const sessions = {};
